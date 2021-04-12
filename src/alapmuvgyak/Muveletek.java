@@ -1,10 +1,17 @@
 package alapmuvgyak;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+
 public class Muveletek extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Muveletek
-     */
+    JFileChooser jFileChooser1 = new JFileChooser();
+    
     public Muveletek() {
         initComponents();
     }
@@ -193,10 +200,20 @@ public class Muveletek extends javax.swing.JFrame {
         mnuFajl.add(mnuFajlMegnyit);
 
         mnuFajlMent.setText("Ment");
+        mnuFajlMent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuFajlMentActionPerformed(evt);
+            }
+        });
         mnuFajl.add(mnuFajlMent);
 
         mnuMentMaskent.setSelected(true);
         mnuMentMaskent.setText("Mentés másként");
+        mnuMentMaskent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuMentMaskentActionPerformed(evt);
+            }
+        });
         mnuFajl.add(mnuMentMaskent);
         mnuFajl.add(sep1);
 
@@ -221,11 +238,6 @@ public class Muveletek extends javax.swing.JFrame {
 
         buttonGroup1.add(mnMuveletOsszeadasOsztas);
         mnMuveletOsszeadasOsztas.setText("Osztás");
-        mnMuveletOsszeadasOsztas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnMuveletOsszeadasOsztasActionPerformed(evt);
-            }
-        });
         mnMuvelet.add(mnMuveletOsszeadasOsztas);
 
         jMenuBar1.add(mnMuvelet);
@@ -266,9 +278,32 @@ public class Muveletek extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void mnMuveletOsszeadasOsztasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnMuveletOsszeadasOsztasActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_mnMuveletOsszeadasOsztasActionPerformed
+    private void mnuMentMaskentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMentMaskentActionPerformed
+         
+        
+    
+            
+         
+    }//GEN-LAST:event_mnuMentMaskentActionPerformed
+
+    private void mnuFajlMentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuFajlMentActionPerformed
+        jFileChooser1.setDialogTitle("Fájl mentése: ");
+        jFileChooser1.setCurrentDirectory(new File("."));
+        jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int valasztottGomb = jFileChooser1.showSaveDialog(this);
+        if(valasztottGomb == JFileChooser.APPROVE_OPTION){
+            File a = jFileChooser1.getSelectedFile();
+            if(a.isDirectory()){
+                lblEredmeny.setText("<html>Elérés: "+a.getPath()+ "<br>Könyvtár"+a.getName()+"</html>");
+                try {
+                    Files.write(Paths.get(a.getPath(),"\\stat.txt"), "Statisztika: ".getBytes());
+                } catch (IOException ex) {
+                    Logger.getLogger(Muveletek.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+        }
+    }//GEN-LAST:event_mnuFajlMentActionPerformed
 
     /**
      * @param args the command line arguments
