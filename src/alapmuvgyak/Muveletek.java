@@ -7,10 +7,11 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Muveletek extends javax.swing.JFrame {
 
-    JFileChooser jFileChooser1 = new JFileChooser();
+    
     
     public Muveletek() {
         initComponents();
@@ -207,7 +208,6 @@ public class Muveletek extends javax.swing.JFrame {
         });
         mnuFajl.add(mnuFajlMent);
 
-        mnuMentMaskent.setSelected(true);
         mnuMentMaskent.setText("Mentés másként");
         mnuMentMaskent.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -279,14 +279,42 @@ public class Muveletek extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void mnuMentMaskentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMentMaskentActionPerformed
-         
+  
+        JFileChooser jFileChooser1 = new JFileChooser(new File("."));
+        jFileChooser1.setDialogTitle("Mentés másként: ");
+        jFileChooser1.setAcceptAllFileFilterUsed(false);
+
+        FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("PNG és Gif képek", "gif", "png");
+        jFileChooser1.addChoosableFileFilter(imgFilter);
+        FileNameExtensionFilter txtFilter = new FileNameExtensionFilter("Csak szöveg (*.txt)", "txt");
+        jFileChooser1.addChoosableFileFilter(txtFilter);
+        FileNameExtensionFilter ilFilter = new FileNameExtensionFilter("speciális (*.il)", "il");
+        jFileChooser1.addChoosableFileFilter(ilFilter);
+
+        jFileChooser1.setFileFilter(txtFilter);
         
-    
-            
-         
+//tesztesetek: nincs név megadva, másik mappa választása, másik kiterjesztés választása
+
+        int valasztottGomb = jFileChooser1.showSaveDialog(this);
+        if (valasztottGomb == JFileChooser.APPROVE_OPTION) {
+            File a = jFileChooser1.getSelectedFile();
+
+            String[] kiterjesztes = ((FileNameExtensionFilter) jFileChooser1.getFileFilter()).getExtensions();
+            String fn = a.getName() + "." + kiterjesztes[0];
+            lblEredmeny.setText("<html>Elérés: " + a.getPath() + "<br>Fájl neve: " + fn + "</html>");
+            try {
+                Files.write(Paths.get(a.getPath()+"."+kiterjesztes[0]), "Statisztika: ".getBytes());
+            } catch (IOException ex) {
+                Logger.getLogger(Muveletek.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+
+
     }//GEN-LAST:event_mnuMentMaskentActionPerformed
 
     private void mnuFajlMentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuFajlMentActionPerformed
+        JFileChooser jFileChooser1 = new JFileChooser();
         jFileChooser1.setDialogTitle("Fájl mentése: ");
         jFileChooser1.setCurrentDirectory(new File("."));
         jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
