@@ -13,6 +13,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Muveletek extends javax.swing.JFrame {
 
+    String mentettFajl;
+
     public Muveletek() {
         initComponents();
     }
@@ -308,6 +310,7 @@ public class Muveletek extends javax.swing.JFrame {
                 fn += "." + kiterjesztes[0];
             }
             /*kiterjesztés van e VÉGE*/
+            mentettFajl = fn;
             Path path = Paths.get(fn);
             boolean mentes = true;
 
@@ -323,7 +326,7 @@ public class Muveletek extends javax.swing.JFrame {
 
             lblEredmeny.setText("<html>Elérés: " + f.getPath() + "<br>Fájl neve: " + fn + "." + kiterjesztes[0] + "</html>");
             try {
-          /* tényleges kiírás */
+                /* tényleges kiírás */
 
                 if (mentes) {
                     Files.write(path, "Statisztika: ".getBytes());
@@ -332,31 +335,45 @@ public class Muveletek extends javax.swing.JFrame {
                 Logger.getLogger(Muveletek.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        }else {
-            JOptionPane.showMessageDialog(this,"Mentés megszakítva","nincs mentés", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Mentés megszakítva", "nincs mentés", JOptionPane.INFORMATION_MESSAGE);
         }
 
 
     }//GEN-LAST:event_mnuMentMaskentActionPerformed
 
     private void mnuFajlMentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuFajlMentActionPerformed
-        JFileChooser jFileChooser1 = new JFileChooser();
-        jFileChooser1.setDialogTitle("Fájl mentése: ");
-        jFileChooser1.setCurrentDirectory(new File("."));
-        jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int valasztottGomb = jFileChooser1.showSaveDialog(this);
-        if (valasztottGomb == JFileChooser.APPROVE_OPTION) {
-            File a = jFileChooser1.getSelectedFile();
-            if (a.isDirectory()) {
-                lblEredmeny.setText("<html>Elérés: " + a.getPath() + "<br>Könyvtár" + a.getName() + "</html>");
-                try {
-                    Files.write(Paths.get(a.getPath(), "\\stat.txt"), "Statisztika: ".getBytes());
-                } catch (IOException ex) {
-                    Logger.getLogger(Muveletek.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+//        JFileChooser jFileChooser1 = new JFileChooser();
+//        jFileChooser1.setDialogTitle("Fájl mentése: ");
+//        jFileChooser1.setCurrentDirectory(new File("."));
+//        jFileChooser1.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//        int valasztottGomb = jFileChooser1.showSaveDialog(this);
+//        if (valasztottGomb == JFileChooser.APPROVE_OPTION) {
+//            File a = jFileChooser1.getSelectedFile();
+//            if (a.isDirectory()) {
+//                lblEredmeny.setText("<html>Elérés: " + a.getPath() + "<br>Könyvtár" + a.getName() + "</html>");
+//                try {
+//                    Files.write(Paths.get(a.getPath(), "\\stat.txt"), "Statisztika: ".getBytes());
+//                } catch (IOException ex) {
+//                    Logger.getLogger(Muveletek.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
+//
+//        }
+        /*az 1. mentés során a mentés másként metódus kell*/
+        if (mentettFajl == null) {
+          
+            mnuMentMaskentActionPerformed(evt);
+        } else {
 
+            try {
+                /*további mentéseknél a megadott helyre és megadott néven kell menteni*/
+                Files.write(Paths.get(mentettFajl), "Statisztika: ment".getBytes());
+            } catch (IOException ex) {
+                Logger.getLogger(Muveletek.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+
     }//GEN-LAST:event_mnuFajlMentActionPerformed
 
     /**
